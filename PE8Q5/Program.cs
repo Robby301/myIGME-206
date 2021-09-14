@@ -27,23 +27,30 @@ namespace PE8Q5
             double y;
             double z;
 
-            int xCounter = 0;
-            int yCounter = 0;
+            double xCounter1 = 0;
+            int xCounter2 = 0;
+            double yCounter1 = 0;
+            int yCounter2 = 0;
 
             double[,,] function = new double[20, 30, 3];
 
-            for(x = -1; x <= 1; xCounter++)
+            for(x = -1; x <= 1; xCounter1 += 0.1)
             {
-                yCounter = 0;
+                yCounter1 = 0;
+                yCounter2 = 0;
 
-                for(y = 1; y <= 4; yCounter++)
+                for(y = 1; y <= 4; yCounter1 += 0.1)
                 {
                     z = (3 * Math.Pow(y, 2)) + (2 * x) - 1;
 
-                    function[xCounter, yCounter, 0] = x;
-                    function[xCounter, yCounter, 1] = y;
-                    function[xCounter, yCounter, 2] = z;
+                    function[xCounter2, yCounter2, 0] = x;
+                    function[xCounter2, yCounter2, 1] = y;
+                    function[xCounter2, yCounter2, 2] = z;
+
+                    yCounter2++;
                 }
+
+                xCounter2++;
             }
         }
     }
