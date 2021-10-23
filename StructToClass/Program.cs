@@ -2,6 +2,11 @@
 
 namespace StructToClass
 {
+    // Class: Friend
+    // Author: Robert Gregory Disbrow
+    // Purpose: This class was changed from a struct to try to get the same output the struct could do (was an issue, needed to implement the Clone method for shallow
+    //          copying used later in the program)
+    // Restrictions: None
     public class Friend
     {
         public string name;
@@ -15,6 +20,10 @@ namespace StructToClass
         }
     }
 
+    // Class: Program
+    // Author: Robert Gregory Disbrow
+    // Purpose: This is the part of the program that tests to see if the new Friend class still performs the same as the previous Friend struct
+    // Restrictions: None
     class Program
     {
         static void Main(string[] args)
