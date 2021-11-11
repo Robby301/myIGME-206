@@ -76,23 +76,13 @@ namespace PE22
             }
 
             Console.WriteLine(trivia.results[0].question);
-            for(int i = 0; i < choices.Length; i++)
+            for(int i = 0; i < 4; i++)
             {
                 Console.WriteLine(choices[i]);
             }
-            /////////////////////////////////////////////////////////////////////////////////////
-            Console.WriteLine(trivia.results[0].correct_answer);
 
             answer = Console.ReadLine();
 
-            for (int i = 0; i < trivia.results[0].incorrect_answers.Count; ++i)
-            {
-                if (answer.Equals(trivia.results[0].incorrect_answers[i]))
-                {
-                    Console.WriteLine("You got it wrong!");
-                    return false;
-                }
-            }
             if(answer.Equals(trivia.results[0].correct_answer))
             {
                 Console.WriteLine("You got it correct!");
@@ -160,8 +150,7 @@ namespace PE22
                 /*D*/ "You are in a green room.",
                 /*E*/ "You are in a blue room.",
                 /*F*/ "You are in a indigo room.",
-                /*G*/ "You are in a velvet room.",
-                /*H*/ "You are in a white room."
+                /*G*/ "You are in a velvet room."
             };
             string[] damageCause =
             {
@@ -179,7 +168,7 @@ namespace PE22
             {
                 bool noDoor = true;
                 bool triviaAnswer;
-                int wagerAmount = 0;
+                int wagerAmount;
                 string leaveOrWager;
                 string doorPicked;
 
@@ -198,7 +187,7 @@ namespace PE22
 
                 start:
 
-                Console.WriteLine();
+                //Console.WriteLine();
                 Console.WriteLine(roomDescription[currentRoom]);
                 for(int i = 0; i < listGraph[currentRoom].Length; i++)
                 {
@@ -228,7 +217,6 @@ namespace PE22
 
                         if (playerHealth == 0)
                         {
-                            Console.WriteLine("GAME OVER: You have died");
                             break;
                         }
                     }
@@ -252,6 +240,7 @@ namespace PE22
                             Console.WriteLine("You have gone through the " + listGraph[currentRoom][i].Item2 + " door.");
                             playerHealth -= listGraph[currentRoom][i].Item3;
                             currentRoom = listGraph[currentRoom][i].Item1;
+                            Console.WriteLine();
                             break;
                         }
                     }
@@ -278,6 +267,8 @@ namespace PE22
                         {
                             break;
                         }
+
+                        goto start;
                     }
                 }
                 else
@@ -290,9 +281,9 @@ namespace PE22
             {
                 Console.WriteLine("GAME OVER: You have died");
             }
-            else if(playerHealth == 7)
+            else if(currentRoom == 7)
             {
-                Console.WriteLine("CONGRADULATIONS, YOU HAVE ESCAPED!");
+                Console.WriteLine("CONGRATULATIONS, YOU HAVE ESCAPED!");
             }
         }
     }
