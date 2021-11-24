@@ -24,7 +24,48 @@ namespace UT3Q2
 
         //Bellow creates a sorted list that will be used for the adjacency list
         static SortedList<(string, string), int> adjList = new SortedList<(string, string), int>();
-        
+
+        static string[][] lGraph = new string[][]
+        {
+            new string[] { "Blue", "Grey" },
+            new string[] { "LightBlue", "Yellow" },
+            new string[] { "LightBlue", "Orange" },
+            new string[] { "Blue", "Grey" },
+            new string[] { "Green" },
+            new string[] { "Yellow" },
+            new string[] { "Purple" },
+            null
+        };
+
+        static void DFS(int v)
+        {
+            bool[] visited = new bool[lGraph.Length];
+
+            DFSUtil(v, ref visited);
+        }
+
+        static void DFSUtil(int v, ref bool[] visited)
+        {
+            int count = -1;
+            visited[v] = true;
+            Console.Write(v + " ");
+
+            string[] thisStateList = lGraph[v];
+
+            if (thisStateList != null)
+            {
+                foreach (string n in thisStateList)
+                {
+                    count++;
+
+                    if (!visited[count])
+                    {
+                        DFSUtil(count, ref visited);
+                    }
+                }
+            }
+        }
+
         static void Main(string[] args)
         {
             //Weights for Red
@@ -106,6 +147,11 @@ namespace UT3Q2
             adjList[("Green", "Purple")]        = -1;
             adjList[("Green", "Orange")]        = -1;
             adjList[("Green", "Green")]         = -1;
+
+            Random rand = new Random();
+
+            DFS(5);
+            Console.WriteLine();
         }
     }
 }
