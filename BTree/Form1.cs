@@ -44,6 +44,8 @@ namespace BTree
             Application.Exit();
         }
 
+        static List<int> numList = new List<int>();
+
         private void Button1_Click(object sender, EventArgs e)
         {
             // load a tree with random numbers
@@ -63,9 +65,34 @@ namespace BTree
                 }
             }*/
 
+            node = new BTree(1, root);
+            root = node;
+            node = new BTree(5, root);
+            node = new BTree(15, root);
+            node = new BTree(20, root);
+            node = new BTree(21, root);
+            node = new BTree(22, root);
+            node = new BTree(23, root);
+            node = new BTree(24, root);
+            node = new BTree(25, root);
+            node = new BTree(30, root);
+            node = new BTree(35, root);
+            node = new BTree(37, root);
+            node = new BTree(40, root);
+            node = new BTree(55, root);
+            node = new BTree(60, root);
+
             this.richTextBox1.Text += "\n";
 
             BTree.TraverseAscending(root);
+            BTree.TraverseAscendingList(root);
+
+            int listSize = numList.Count;
+
+            for(int i = 0; i < listSize; i++)
+            {
+                Console.Write(numList[i] + " ");
+            }
 
             VisualizeBinaryTree visualizeBinaryTree = new VisualizeBinaryTree(root);
         }
@@ -686,6 +713,22 @@ namespace BTree
             }
         }
 
+        //////////////////////////////////////////////////////////
+        // Make and ascending list
+        public static void TraverseAscendingList(BTree node)
+        {
+            if (node != null)
+            {
+                TraverseAscendingList(node.ltChild);
+
+                if (node.isData)
+                {
+                    numList.Add(node.data) ;
+                }
+
+                TraverseAscendingList(node.gteChild);
+            }
+        }
 
         //////////////////////////////////////////////////////////
         // Print the tree in descending order
