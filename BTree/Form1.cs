@@ -65,6 +65,7 @@ namespace BTree
                 }
             }*/
 
+            //Everything below will make the BTree with the desired numbers
             node = new BTree(1, root);
             root = node;
             node = new BTree(5, root);
@@ -84,15 +85,34 @@ namespace BTree
 
             this.richTextBox1.Text += "\n";
 
+
+            //Now everything else below will handle the ascending and adding into the list
             BTree.TraverseAscending(root);
-            BTree.TraverseAscendingList(root);
+            BTree.TraverseAscendingList(root, ref numList);
 
             int listSize = numList.Count;
 
-            for(int i = 0; i < listSize; i++)
-            {
-                Console.Write(numList[i] + " ");
-            }
+            BTree root2 = null;
+
+            this.richTextBox1.Clear();
+
+            node = new BTree(numList[7], root, false);
+            root = node;
+            node = new BTree(numList[3], root, false);
+            node = new BTree(numList[11], root, false);
+
+            node = new BTree(numList[0], root);
+            node = new BTree(numList[1], root);
+            node = new BTree(numList[2], root);
+            node = new BTree(numList[4], root);
+            node = new BTree(numList[5], root);
+            node = new BTree(numList[6], root);
+            node = new BTree(numList[8], root);
+            node = new BTree(numList[9], root);
+            node = new BTree(numList[10], root);
+            node = new BTree(numList[12], root);
+            node = new BTree(numList[13], root);
+            node = new BTree(numList[14], root);
 
             VisualizeBinaryTree visualizeBinaryTree = new VisualizeBinaryTree(root);
         }
@@ -715,18 +735,18 @@ namespace BTree
 
         //////////////////////////////////////////////////////////
         // Make and ascending list
-        public static void TraverseAscendingList(BTree node)
+        public static void TraverseAscendingList(BTree node, ref List<int> numList)
         {
             if (node != null)
             {
-                TraverseAscendingList(node.ltChild);
+                TraverseAscendingList(node.ltChild, ref numList);
 
                 if (node.isData)
                 {
-                    numList.Add(node.data) ;
+                    numList.Add((int)node.data);
                 }
 
-                TraverseAscendingList(node.gteChild);
+                TraverseAscendingList(node.gteChild, ref numList);
             }
         }
 
