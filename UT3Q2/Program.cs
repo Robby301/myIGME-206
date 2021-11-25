@@ -1,11 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UT3Q2
 {
+    public class Node : IComparable<Node>
+    {
+        public int vertex;
+
+        public List<Edge> edges = new List<Edge>();
+
+        public int minCostToStart;
+        public Node nearestToStart;
+        public bool visited;
+
+        public Node(int vertex)
+        {
+            this.vertex = vertex;
+            this.minCostToStart = int.MaxValue;
+        }
+
+        public void AddEdge(int cost, Node connection)
+        {
+            Edge e = new Edge(cost, connection);
+            edges.Add(e);
+        }
+
+        public int CompareTo(Node n)
+        {
+            return this.minCostToStart.CompareTo(n.minCostToStart);
+        }
+    }
+
+    public class Edge :IComparable<Edge>
+    {
+        public int cost;
+        public Node connectedNode;
+
+        public Edge(int cost, Node connectedNode)
+        {
+            this.cost = cost;
+            this.connectedNode = connectedNode;
+        }
+
+        public int CompareTo(Edge e)
+        {
+            return this.cost.CompareTo(e.cost);
+        }
+    }
+
     class Program
     {
         //Below is the code used to make the weighted adjacency matrix (-1 means no connection)
@@ -25,46 +68,137 @@ namespace UT3Q2
         //Bellow creates a sorted list that will be used for the adjacency list
         static SortedList<(string, string), int> adjList = new SortedList<(string, string), int>();
 
-        static string[][] lGraph = new string[][]
+        static List<Node> colors = new List<Node>();
+
+        static int[][] cGraph = new int[][]
         {
-            new string[] { "Blue", "Grey" },
-            new string[] { "LightBlue", "Yellow" },
-            new string[] { "LightBlue", "Orange" },
-            new string[] { "Blue", "Grey" },
-            new string[] { "Green" },
-            new string[] { "Yellow" },
-            new string[] { "Purple" },
+            new int[] { 1, 2 },
+            new int[] { 3, 4 },
+            new int[] { 3, 6 },
+            new int[] { 1, 2 },
+            new int[] { 7 },
+            new int[] { 4 },
+            new int[] { 5 },
             null
+        };
+
+        static int[][] costCGraph = new int[][]
+        {
+            new int[] { 1, 5 },
+            new int[] { 1, 8 },
+            new int[] { 0, 1 },
+            new int[] { 1, 0 },
+            new int[] { 6 },
+            new int[] { 1 },
+            new int[] { 1 },
+            null
+        };
+
+        static string[] colorNodes = new string[]
+        {
+            "Red",         //0
+            "Blue",        //1
+            "Grey",        //2
+            "Light-Blue",  //3
+            "Yellow",      //4
+            "Purple",      //5
+            "Orange",      //6
+            "Green"        //7
         };
 
         static void DFS(int v)
         {
-            bool[] visited = new bool[lGraph.Length];
+            bool[] visited = new bool[cGraph.Length];
 
             DFSUtil(v, ref visited);
         }
 
         static void DFSUtil(int v, ref bool[] visited)
         {
-            int count = -1;
             visited[v] = true;
-            Console.Write(v + " ");
+            Console.Write(colorNodes[v] + " ");
 
-            string[] thisStateList = lGraph[v];
+            int[] thisStateList = cGraph[v];
 
             if (thisStateList != null)
             {
-                foreach (string n in thisStateList)
+                foreach (int n in thisStateList)
                 {
-                    count++;
-
-                    if (!visited[count])
+                    if (!visited[n])
                     {
-                        DFSUtil(count, ref visited);
+                        DFSUtil(n, ref visited);
                     }
                 }
             }
         }
+
+        static public List<Node> GetShortestPathDijkstra()
+        {
+            DijkstraSearch();
+            List<Node> shortestPath = new List<Node>();
+            shortestPath.Add(colors[7]);
+            BuildShortestPath(shortestPath, colors[7]);
+            shortestPath.Reverse();
+            return (shortestPath);
+        }
+
+        static public void BuildShortestPath(List<Node> list, Node node)
+        {
+            if(node.nearestToStart == null)
+            {
+                return;
+            }
+
+            list.Add(node.nearestToStart);
+            BuildShortestPath(list, node.nearestToStart);
+        }
+
+        static public void DijkstraSearch()
+        {
+            Node start = colors[0];
+
+            start.minCostToStart = 0;
+            List<Node> priorityQueue = new List<Node>();
+
+            priorityQueue.Add(start);
+
+            do
+            {
+                priorityQueue.Sort();
+
+                Node node = priorityQueue.First();
+                priorityQueue.Remove(node);
+
+                foreach (Edge cnn in node.edges)
+                {
+                    Node childNode = cnn.connectedNode;
+                    if (childNode.visited)
+                    {
+                        continue;
+                    }
+
+                    if (childNode.minCostToStart == int.MaxValue ||
+                        node.minCostToStart + cnn.cost < childNode.minCostToStart)
+                    {
+                        childNode.minCostToStart = node.minCostToStart + cnn.cost;
+                        childNode.nearestToStart = node;
+                        if (!priorityQueue.Contains(childNode))
+                        {
+                            priorityQueue.Add(childNode);
+                        }
+                    }
+                }
+
+                node.visited = true;
+
+                if (node == colors[7])
+                {
+                    return;
+                }
+            } while (priorityQueue.Any());
+        }
+
+        static LinkedList<Node> nodesList = new LinkedList<Node>();
 
         static void Main(string[] args)
         {
@@ -150,8 +284,37 @@ namespace UT3Q2
 
             Random rand = new Random();
 
-            DFS(5);
+            DFS(rand.Next(0, 8));
             Console.WriteLine();
+
+            Node node;
+            int i = 0;
+
+            for(i = 0; i < cGraph.Length; ++i)
+            {
+                node = new Node(i);
+                colors.Add(node);
+            }
+
+            for(i = 0; i < (cGraph.Length - 1); ++i)
+            {
+                int[] thisState = cGraph[i];
+                int[] thisCost = costCGraph[i];
+
+                for(int costCount = 0; costCount < thisState.Length; ++costCount)
+                {
+                    colors[i].AddEdge(thisCost[costCount], colors[thisState[costCount]]);
+                }
+
+                colors[i].edges.Sort();
+            }
+
+            List<Node> shortestPath = GetShortestPathDijkstra();
+
+            for(i = 0; i < colors.Count; i++)
+            {
+                nodesList.AddLast(colors[i]);
+            }
         }
     }
 }
