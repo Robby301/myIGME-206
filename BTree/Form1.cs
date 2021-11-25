@@ -53,7 +53,7 @@ namespace BTree
 
             this.richTextBox1.Clear();
 
-            for (int i = 0; i < 10; ++i)
+            /*for (int i = 0; i < 10; ++i)
             {
                 node = new BTree(random.Next(100), root);
 
@@ -61,7 +61,7 @@ namespace BTree
                 {
                     root = node;
                 }
-            }
+            }*/
 
             this.richTextBox1.Text += "\n";
 
