@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FinalQ2
+﻿namespace FinalQ2
 {
+    // Class: Program
+    // Author: Robert Gregory Disbrow
+    // Purpose: This program makes an adjacency matrix and an adjacency list based on a weighted digraph given
+    // Restrictions: None
     class Program
     {
         //Adjaceny Matrix
@@ -22,7 +20,7 @@ namespace FinalQ2
             /*H*/  {-1,  -1,  -1,  -1,  -1,  -1,  -1,  -1}
         };
 
-        // Adjacency List (neighbor's index, weight)
+        // Adjacency List (neighbors, weight)
         static (int, int)[][] listGraph = new (int, int)[][]
         {
             /* A (0) */ new (int, int)[] {(1, 1), (2, 5)},
@@ -34,10 +32,5 @@ namespace FinalQ2
             /* G (6) */ new (int, int)[] {(4, 2), (5,1)},
             /* H (7) */ null
         };
-
-        static void Main(string[] args)
-        {
-
-        }
     }
 }
